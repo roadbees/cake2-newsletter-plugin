@@ -1,0 +1,9 @@
+div#campaigns-manager-index section {
+	border: 1px solid #DDDDDD;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+
+div#campaigns-manager-index section div.controls {
+	border-top: 1px solid #DDD;
+}
