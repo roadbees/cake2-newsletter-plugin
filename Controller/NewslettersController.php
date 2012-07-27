@@ -20,7 +20,7 @@ class NewslettersController extends NewsletterAppController {
 	 */
 	public $name = 'Newsletters';
         
-    var $uses = array('Newsletter.Newsletter', 'Newsletter.Subscriber', 'Newsletter.Campaign');
+        public $uses = array('Newsletter.Newsletter', 'Newsletter.Subscriber', 'Newsletter.Campaign');
 	
         
     /**
@@ -32,7 +32,7 @@ class NewslettersController extends NewsletterAppController {
 	
 	public function beforeFilter() {
 		parent::beforeFilter();		
-		$this->Auth->allow('*');
+		$this->Auth->allow();
 
 	}
         

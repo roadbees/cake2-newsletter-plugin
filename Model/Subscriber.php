@@ -22,11 +22,16 @@ class Subscriber extends NewsletterAppModel {
     */
 	
     public $name = "Subscriber";
-    var $primaryKey = '_id';
+       
+    /**
+     *
+     * @var string primarykey for mongodb
+     */
+    public  $primaryKey = '_id';
     
     //put the id of the main Campaign here 
     // ich weiß nicht so schön soll ich wirklich suchen?
-    var $main_campaign = '4f749e050d9e5df20b000000';
+    private  $main_campaign = '-1';
 	
     /**
     * schema
@@ -34,13 +39,13 @@ class Subscriber extends NewsletterAppModel {
     * @var array
     * @access public
     */
-     var $mongoSchema = array( 
+    public $mongoSchema = array( 
         'email' => array('type' => 'string'),
         'campaigns' => array('type' => 'array')
     );
     
     
-    var $validate = array(
+    public $validate = array(
         'email' => array('rule' => 'email','message' => "Bitte richtige Email eingeben"),
         'email'=> array('rule' => 'isUnique','message' => "Diese Email ist schon vergeben")
     );
@@ -48,13 +53,12 @@ class Subscriber extends NewsletterAppModel {
     public function beforeSave(){
         //debug($this->data);
         if(!$this->data['Subscriber']['campaigns']) 
-            $this->set('campaigns', array($main_campaign));  
+            $this->set('campaigns', array($this->main_campaign));  
+
+        $this->schema(true);
         return true;
     }
 
-    public function onError($e){
-        debug($e);
-    }
     
     
 }

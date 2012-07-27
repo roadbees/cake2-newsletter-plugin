@@ -10,7 +10,7 @@
  * @since         Roadbees v 0.1
  */
 
-class SubscribersController extends AppController {
+class SubscribersController extends NewsletterAppController {
 
 
 
@@ -34,7 +34,7 @@ class SubscribersController extends AppController {
 		if($this->data){
 			$this->Subscriber->Behaviors->attach('Mongodb.SqlCompatible');
 			$this->Subscriber->create();
-			$this->data['Subscriber']['email'] = str_replace(" ", "", $this->data['Subscriber']['email']);
+			$this->request->data['Subscriber']['email'] = str_replace(" ", "", $this->data['Subscriber']['email']);
 			$this->Subscriber->set($this->data);
 			if($this->Subscriber->validates()) {
 				if($this->Subscriber->save()){
@@ -58,32 +58,24 @@ class SubscribersController extends AppController {
 	
 	public function unsubscribe(){
 		if($this->data) {
-			$subsriber = $this->Subsriber->find('first',array('conditions' => array('Subsriber.email' => $this->data['email'])));
-			if($subsriber){
-				unsuscribe($subsriber['Subsriber']['_id']);
+			$subscriber = $this->Subscriber->find('first',array('conditions' => array('Subscriber.email' => $this->data['email'])));
+                debug($subscriber);
+                        if($subscriber){
+                                if($this->Subscriber->delete($subscriber['Subscriber']['_id'])) {
+                        	        $this->Session->setFlash(__d('email','Email wurde gelöscht',false));
+			                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
+                                } else {
+                                        $this->Session->setFlash(__d('email','Probleme beim Löschen ',false));
+			                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
+         
+                                }        
 			}else{
-				$this->Session->setFlash(__d('email','Die Email wurde nicht gefunden',false));
-			    $this->redirect('/newsletters/unsubscribe');
+                                $this->Session->setFlash(__d('email','Die Email wurde nicht gefunden',false));
+                                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
 			}
 		}
 	}
 	
-	/**
-	 *
-	 * unsubscribe to newsletter the email way
-	 *
-	 * @public
-	 */
-	
-	public function unsubscribeId($id = null){
-		if($this->Subsriber->delete($id)){
-			$this->Session->setFlash(__d('email','Email wurde gelöscht',false));
-			$this->redirect('/newsletters');
-		}else{
-			$this->Session->setFlash(__d('email','Probleme beim Löschen ',false));
-			$this->redirect('/newsletters');
-		}
-	}
 
 	/* MANAGER FUNCTIONS */
         
