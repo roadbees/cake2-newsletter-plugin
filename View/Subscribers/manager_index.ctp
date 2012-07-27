@@ -2,6 +2,7 @@
 
 <?php
 	foreach($subscribers as $subscriber):
+debug($subscriber);
 ?>
 
 <div>

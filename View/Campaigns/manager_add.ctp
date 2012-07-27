@@ -6,7 +6,7 @@
 																		'controller' => 'campaigns',
 																		'action' =>'add',
 																		'manager' => true,
-																		'plugin' => "news_letter")));
+																		'plugin' => "newsletter")));
 	?>
 	
 	<p>
@@ -17,7 +17,7 @@
 	
 	<p>
 		<label for="content">Beschreibung:</label>
-		<?php echo $this->Markitup->editor('Campaign.description',array('skin' => 'simple','set' => 'markdown','parser' => 'markdown')); ?> 
+		<?php echo $this->Form->input('description'); ?> 
 	</p>
 
 	<p>

@@ -20,7 +20,7 @@ class CampaignsController extends NewsletterAppController {
 	/**
 	 *
 	 */
-	public $helpers = array('Markitup.Markitup');
+//	public $helpers = array('Markitup.Markitup');
 	
 	
 	/**
@@ -82,7 +82,7 @@ class CampaignsController extends NewsletterAppController {
 			$this->Campaign->create();						
 			if($this->Campaign->save($this->data)) {
 				$this->Session->setFlash("Kampagne angelegt");
-				$this->redirect(array('manager' => true, 'controller' => "campaigns", "action" => "index"));
+				$this->redirect(array('manager' => true,'plugin' => 'newsletter', 'controller' => "campaigns", "action" => "index"));
 			} else {			
 				$this->Session->setFlash("Kampagne konnte nicht angelegt werden");
 				$this->render();

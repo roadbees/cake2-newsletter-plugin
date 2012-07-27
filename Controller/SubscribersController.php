@@ -31,20 +31,17 @@ class SubscribersController extends NewsletterAppController {
 	}
 	
 	public function subscribe(){
-		if($this->data){
+		if($this->request->is('post') === true & !empty($this->data)){
 			$this->Subscriber->Behaviors->attach('Mongodb.SqlCompatible');
-			$this->Subscriber->create();
 			$this->request->data['Subscriber']['email'] = str_replace(" ", "", $this->data['Subscriber']['email']);
-			$this->Subscriber->set($this->data);
-			if($this->Subscriber->validates()) {
-				if($this->Subscriber->save()){
+				if($this->Subscriber->save($this->data)){
 					$this->Session->setFlash("Email angelegt");
 					$this->redirect(array('manager' => false, 'controller' => "newsletters", "action" => "index"));	
 				}else {			
 					$this->Session->setFlash("Email konnte nicht angelegt werden");
 					$this->render();
 				}
-			}
+		
 		}
 	}
         

@@ -41,7 +41,9 @@ class Subscriber extends NewsletterAppModel {
     */
     public $mongoSchema = array( 
         'email' => array('type' => 'string'),
-        'campaigns' => array('type' => 'array')
+        'campaigns' => array('type' => 'array'),
+        'created' => array('type' => 'datetime'),
+        'modified' => array('type' => 'datetime') 
     );
     
     
