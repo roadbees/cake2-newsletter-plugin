@@ -28,10 +28,6 @@ class Subscriber extends NewsletterAppModel {
      * @var string primarykey for mongodb
      */
     public  $primaryKey = '_id';
-    
-    //put the id of the main Campaign here 
-    // ich weiß nicht so schön soll ich wirklich suchen?
-    private  $main_campaign = '-1';
 	
     /**
     * schema
@@ -54,9 +50,6 @@ class Subscriber extends NewsletterAppModel {
     
     public function beforeSave(){
         //debug($this->data);
-        if(!$this->data['Subscriber']['campaigns']) 
-            $this->set('campaigns', array($this->main_campaign));  
-
         $this->schema(true);
         return true;
     }

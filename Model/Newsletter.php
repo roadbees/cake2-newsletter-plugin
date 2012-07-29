@@ -25,6 +25,7 @@ class Newsletter extends NewsletterAppModel {
     
     var $primaryKey = '_id';
 
+
     public $hasAndBelongsToMany = array('Campaign' => array('className' => 'Campaign'));
     
     /**
@@ -58,7 +59,7 @@ class Newsletter extends NewsletterAppModel {
     	$this->save();
     }
 
-    public function beforeSave(){    
+    public function beforeSave(){   
         return true;
     }
     

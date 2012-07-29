@@ -11,8 +11,8 @@ echo $this->Html->script('/newsletter/js/libs/g.bar-min');
 <div id="newsletter-plugin-index">
     <div id="newsletterMenu">
         <ul id="menu" class="">
-            <li><?php echo $this->Html->link('Newsletter',array('manager' => true, 'controller' => 'newsletters', 'action' => 'index'))?></li>
-            <li><?php echo $this->Html->link('Subscriber',array('manager' => true, 'controller' => 'subscribers', 'action' => 'index'))?></li>
+            <li><?php echo $this->Html->link('Newsletters Overview',array('manager' => true, 'controller' => 'newsletters', 'action' => 'index'))?></li>
+            <li><?php echo $this->Html->link('Subscribers Overview',array('manager' => true, 'controller' => 'subscribers', 'action' => 'index'))?></li>
         </ul>
     </div>
 

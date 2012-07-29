@@ -30,9 +30,7 @@
 		echo $this->Form->input('Campaign');
 		?>
 	</p>
-
-	<input type="file" name="data[Images]" multiple="multiple">
-	
+	<input type="file" name="data[Images][]" multiple="multiple">
 	<p>		
 		<?php echo $this->Form->button('save',array('type' => "submit")) ?>
 	</p>

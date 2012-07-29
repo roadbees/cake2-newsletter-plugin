@@ -20,9 +20,9 @@ class NewslettersController extends NewsletterAppController {
 	 */
 	public $name = 'Newsletters';
         
-        public $uses = array('Newsletter.Newsletter', 'Newsletter.Subscriber', 'Newsletter.Campaign');
+    public $uses = array('Newsletter.Newsletter', 'Newsletter.Subscriber', 'Newsletter.Campaign');
 	
-        
+
     /**
 	*
 	* before filter
@@ -33,8 +33,26 @@ class NewslettersController extends NewsletterAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();		
 		$this->Auth->allow();
+		if(!fileExistsInPath(APP.DS.'tmp'.DS.'newsletter_init.lock'))
+			$this->init();
 
 	}
+
+
+
+	public function init(){
+		$default_campaing = array('Campaign' => array(
+				'name' => 'To All',
+				'description' => 'To All Subscriber',
+				'active' => 1,
+				'main' => 1
+				)
+			);
+		if($this->Campaign->save($default_campaing)){
+			$id = $this->Campaign->id;
+			file_put_contents(APP.DS.'tmp'.DS.'newsletter_init.lock', $id);
+		}
+	} 
         
     public function index(){
         $newsletters = $this->Newsletter->find('all', array('conditions' => array('Newsletter.publish' => '1')));
@@ -109,15 +127,17 @@ class NewslettersController extends NewsletterAppController {
 		$this->set('campaigns',  $this->Campaign->find('list',array('fields' => array('Campaign.name'))));
 		if($this->data){
 			//files 
-			if($this->data['Images'] && $this->data['Images']['name'] != "" ){
-				$fileOK = $this->uploadFiles('img/newsletter', $this->data['Images']);
+			if($this->data['Images']){
+				$fileOK = $this->uploadFiles('newsletter', $this->data['Images']);
 				if(!array_key_exists('urls', $fileOK)) {
 					$this->Session->setFlash("File error");
 					debug($fileOK);
 				}
 			}		
 			$this->Newsletter->create();
-			$this->Newsletter->set($this->data);
+			$data = $this->data;
+			$data['Newsletter']['content'] = str_replace("#{imgpath}", "http://".env('HTTP_HOST')."/files/newsletter",$data['Newsletter']['content']);
+			$this->Newsletter->set($data);
 			$this->Newsletter->set(array(
 				"viewCounter" => 0,
 				"publishCounter" => 0, 
@@ -175,9 +195,7 @@ class NewslettersController extends NewsletterAppController {
 		
 		$data = $this->Newsletter->read();
 		//$data['Email']['content'] = $this->Markitup->parse($data['News']['content'],'markdown');
-		
 		$counter = $this->sendEmailToSubscribers($data);
-		
 		if($counter > 0) {
 			$this->Newsletter->set(array('publishCounter' => $counter, 'published' => 1));
 			$this->Newsletter->save();
@@ -196,7 +214,7 @@ class NewslettersController extends NewsletterAppController {
 	*
 	**/
 	
-	public  function manager_delete($newsid = null) {
+	public function manager_delete($newsid = null) {
 		
 		if($newsid == null) {
 			$this->redirect('/manager/newsletter');
@@ -241,7 +259,7 @@ class NewslettersController extends NewsletterAppController {
 
 		$subscribers = $this->Subscriber->find('all',array('conditions' => array('Subscriber.campaigns' => array('$in' => $active_campaigns))));
 
-		debug($subscribers);
+		Configure::load('kongress');
 
 		$email_chunks = array_chunk($subscribers,$chunk_size);
 		
@@ -252,9 +270,9 @@ class NewslettersController extends NewsletterAppController {
 				$data['subscriberId'] = $email_adress['Subscriber']['_id'];
 				
 				$email->viewVars(array('info' => $data));
-				
-				$email->subject('Roadbees - Newsletter')
-				->from('hallo@codebility.com')
+
+				$email->subject(Configure::read('Kongress.subject'))
+				->from(Configure::read('Kongress.absender'))
 				->to($email_adress['Subscriber']['email'])
 				->template('newsletter/info')
 				->emailFormat('both')
@@ -272,9 +290,10 @@ class NewslettersController extends NewsletterAppController {
 
     function uploadFiles($folder, $formdata, $itemId = null) {
 		// setup dir names absolute and relative
-		$folder_url = WWW_ROOT.$folder;
+		$folder_url = WWW_ROOT.DS.'files'.DS.$folder;
 		$rel_url = $folder;
 		
+
 		// create the folder if it does not exist
 		if(!is_dir($folder_url)) {
 			mkdir($folder_url, 0777, true);
@@ -283,9 +302,9 @@ class NewslettersController extends NewsletterAppController {
 		// if itemId is set create an item folder
 		if($itemId) {
 			// set new absolute folder
-			$folder_url = WWW_ROOT.$folder.'/'.$itemId; 
+			$folder_url = WWW_ROOT.$folder.DS.$itemId; 
 			// set new relative folder
-			$rel_url = $folder.'/'.$itemId;
+			$rel_url = $folder.DS.$itemId;
 			// create directory
 			if(!is_dir($folder_url)) {
 				mkdir($folder_url);
@@ -297,6 +316,7 @@ class NewslettersController extends NewsletterAppController {
 		
 		// loop through and deal with the files
 		foreach($formdata as $file) {
+
 			// replace spaces with underscores
 			$filename = str_replace(' ', '_', $file['name']);
 			// assume filetype is false
@@ -320,14 +340,14 @@ class NewslettersController extends NewsletterAppController {
 							$full_url = $folder_url.'/'.$filename;
 							$url = $rel_url.'/'.$filename;
 							// upload the file
-							$success = move_uploaded_file($file['tmp_name'], $url);
+							$success = move_uploaded_file($file['tmp_name'], $full_url);
 						} else {
 							// create unique filename and upload file
 							ini_set('date.timezone', 'Europe/London');
 							$now = date('Y-m-d-His');
 							$full_url = $folder_url.'/'.$now.$filename;
 							$url = $rel_url.'/'.$now.$filename;
-							$success = move_uploaded_file($file['tmp_name'], $url);
+							$success = move_uploaded_file($file['tmp_name'], $full_url);
 						}
 						// if upload was successful
 						if($success) {
