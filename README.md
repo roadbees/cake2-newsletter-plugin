@@ -1,5 +1,5 @@
 ## Newsletter Plugin for CakePHP 2.X
-
+from submodule
 A simple and easy to use newsletter plugin
 
 ### License
