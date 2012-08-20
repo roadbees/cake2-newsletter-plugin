@@ -24,16 +24,16 @@
 		<?php 
 		//echo $this->Form->input('Campaign');
 		?>
-		<select type="select" multiple="multiple" name="data[Newsletter][campaigns][]">
-			<?php forEach($campaigns as $campaign){
+<!-- 		<select type="select" multiple="multiple" name="data[Newsletter][campaigns][]">
+			<?php /* forEach($campaigns as $campaign){
 				if(in_array($campaign['Campaign']['_id'],$this->data['Newsletter']['campaigns']))
 					$selected = ' selected="selected"';
 				else
 					$selected = '';
 				echo '<option value="'.$campaign['Campaign']['_id'].'"'.$selected.'>'.$campaign['Campaign']['name'].'</option>';
-			} 
+			} */
 			?>
-		</select>
+		</select> -->
 	</p>
 	
 	<p>		

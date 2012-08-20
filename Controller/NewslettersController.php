@@ -250,14 +250,8 @@ class NewslettersController extends NewsletterAppController {
 		//filter active
 		$active_campaigns = array();
 
-		foreach($data['Newsletter']['campaigns'] as $id){
-			$this->Campaign->id = $id;
-			if($this->Campaign->field('active') == 1)
-				array_push($active_campaigns, $id);
-		}
 
-
-		$subscribers = $this->Subscriber->find('all',array('conditions' => array('Subscriber.campaigns' => array('$in' => $active_campaigns))));
+		$subscribers = $this->Subscriber->find('all');
 
 		Configure::load('kongress');
 

@@ -27,7 +27,7 @@
 	<p>
 		<label for="tags">Campaings:</label>
 		<?php 
-		echo $this->Form->input('Campaign');
+		//echo $this->Form->input('Campaign');
 		?>
 	</p>
 	<input type="file" name="data[Images][]" multiple="multiple">

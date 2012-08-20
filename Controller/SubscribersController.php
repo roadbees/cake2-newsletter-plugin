@@ -12,8 +12,6 @@
 
 class SubscribersController extends NewsletterAppController {
 
-
-
 	public $name = 'Subscribers';
 
 	var $uses = array('Newsletter.Subscriber','Newsletter.Campaign');
@@ -35,18 +33,23 @@ class SubscribersController extends NewsletterAppController {
 			$data = $this->request->data;
 			$this->Subscriber->Behaviors->attach('Mongodb.SqlCompatible');
 			$data['Subscriber']['email'] = str_replace(" ", "", $this->data['Subscriber']['email']);
-			if(!$data['Subscriber']['campaign'])
-				$data['Subscriber']['campaign'] = $this->Campaign->find('first', array(
-					'conditions'=> array('Campaing.main' => 1),
-					'fields' => array('Campaing._id')
-					));
-				if($this->Subscriber->save($data)){
+
+			if($this->Subscriber->save($data)){
+				if($this->request->is('ajax')){
+					$this->render(ajax_success);
+				}else{
 					$this->Session->setFlash("Email angelegt");
-					$this->redirect(array('manager' => false, 'controller' => "newsletters", "action" => "index"));	
-				}else {			
-					$this->Session->setFlash("Email konnte nicht angelegt werden");
-					$this->render();
+					$this->redirect(array('manager' => false, 'controller' => "posts", "action" => "index", "plugin" => false));
 				}
+			}else{
+				if($this->request->is('ajax')){
+					$this->render(ajax_failed);
+				}else{			
+				$this->Session->setFlash("Email konnte nicht angelegt werden");
+				$this->redirect('/posts');
+				//$this->redirect(array('manager' => false, 'controller' => "posts", "action" => "index", "plugin" => false));
+				}
+			}
 		
 		}
 	}
