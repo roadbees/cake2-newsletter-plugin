@@ -8,28 +8,69 @@ echo $this->Html->script('/newsletter/js/libs/g.pie-min');
 echo $this->Html->script('/newsletter/js/libs/g.bar-min'); 
 ?>
 
-<div id="newsletter-plugin-index">
-    <div id="newsletterMenu">
-        <ul id="menu" class="">
-            <li><?php echo $this->Html->link('Newsletters Overview',array('manager' => true, 'controller' => 'newsletters', 'action' => 'index'))?></li>
-            <li><?php echo $this->Html->link('Subscribers Overview',array('manager' => true, 'controller' => 'subscribers', 'action' => 'index'))?></li>
-        </ul>
-    </div>
-
-
-
-    <h1>Newsletters Übersicht</h1>
-
-
-    <div id="newslettersByViews" style="width: 640px; height: 480px;"></div>
-    
-    
+<div id="newsletter-plugin-index"> 
+    <h1>Dashboard</h1>
+    <section id="newsletter-stats">
+        <h2>Stats</h2>
+        <div id="stats-tables">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Anzahl</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Newsletters:</td><td><?php echo count($newsletters) ?></td>                        
+                    </tr>
+                    <tr>
+                        <td>veröffentlichte Newsletters:</td><td><?php echo count($publishedNewsletters) ?></td>                        
+                    </tr>
+                    <tr>
+                        <td>Anmeldungen:</td><td><?php echo count($subscribers) ?></td>                        
+                    </tr>
+                    <tr>
+                        <td>Kampagnen:</td><td><?php echo count($campaigns) ?></td>                        
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="4">Newsletters Details</th>
+                    </tr>
+                    <tr>
+                        <th>Title:</th>                        
+                        <th>erstellt am:</th>
+                        <th>veröffentlicht?:</th>
+                        <th>veröffentlicht am:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($newsletters as $newsletter): ?>
+                    <tr>
+                        <td><?php echo $newsletter['Newsletter']['title'] ?></td>
+                        <td><?php echo $this->Time->nice($newsletter['Newsletter']['created']->sec); ?></td>                        
+                        <td><?php echo (String)$newsletter['Newsletter']['published'] ?></td>
+                        <td><?php if(!$newsletter['Newsletter']['published']) echo "N/A"; else echo $this->Time->nice($newsletter['Newsletter']['publishedDate']->sec); ?></td>
+                    </tr>                    
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <div><?php //debug($subscribers) ?></div>
+            <div><?php debug($newsletters) ?></div>
+        </div>
+    </section>
+    <secion id="graphs">
+        <h2>Graphs</h2>
+        <div id="newslettersByViews" style="width: 640px; height: 480px;"></div>
+    </secion>
 </div>
 
 <script>
     //get the json models
-    var _newsletters = <?php echo $newsletters ?>,
-        _subscribers = <?php echo $subscribers ?>;
+    var _newsletters = <?php echo json_encode($newsletters) ?>,
+        _subscribers = <?php echo json_encode($subscribers) ?>;
 
     //some preparations
     //for newsletters 

@@ -87,10 +87,14 @@ class NewslettersController extends NewsletterAppController {
 		$newsletters = $this->Newsletter->find('all');
 		$subscribers = $this->Subscriber->find('all');
 		$campaigns = $this->Campaign->find('all');
+		
+		$publishedNewsletters = $this->Newsletter->find('all',array('conditions' => array('Newsletter.published' => 1)));
+		
 		$this->set(array(
-			'newsletters' => json_encode($newsletters), 
-			'subscribers' => json_encode($subscribers),
-			'campaigns' => json_encode($campaigns)
+			'newsletters' => $newsletters, 
+			'subscribers' => $subscribers,
+			'campaigns' => $campaigns,
+			'publishedNewsletters' => $publishedNewsletters 
 			)
 		);
 	}
@@ -105,13 +109,20 @@ class NewslettersController extends NewsletterAppController {
 		$this->set('newsletters' , $newsletters);
 	}
 
+	
+	/**
+	 *
+	 * the help function for the newsletter
+	 */
+   public function manager_help() {
+		
+   }
 
 	/**
 	* manager_view
 	*
 	* 
-	*/
-	
+	*/	
 	public function manager_view($id = null){
 		$this->Newsletter->id = $id;
 		$this->set('newsletter', $this->Newsletter->read());

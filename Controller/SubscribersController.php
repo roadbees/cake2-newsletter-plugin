@@ -29,6 +29,7 @@ class SubscribersController extends NewsletterAppController {
 	}
 	
 	public function subscribe(){
+		$this->layout = "public";
 		if($this->request->is('post') === true & !empty($this->data)){
 			$data = $this->request->data;
 			$this->Subscriber->Behaviors->attach('Mongodb.SqlCompatible');
@@ -37,23 +38,21 @@ class SubscribersController extends NewsletterAppController {
 			if($this->Subscriber->save($data)){
 				if($this->request->is('ajax')){
 					$this->render(ajax_success);
-				}else{
-					$this->Session->setFlash("Email angelegt");
-					$this->redirect(array('manager' => false, 'controller' => "posts", "action" => "index", "plugin" => false));
+				}else{					
+					$this->render('subscribesuccess');
+					return;
 				}
-			}else{
+			} else {
 				if($this->request->is('ajax')){
 					$this->render(ajax_failed);
-				}else{			
-				$this->Session->setFlash("Email konnte nicht angelegt werden");
-				$this->redirect('/posts');
-				//$this->redirect(array('manager' => false, 'controller' => "posts", "action" => "index", "plugin" => false));
+				} else {			
+					$this->Session->setFlash("Email konnte nicht angelegt werden");
+					$this->render('subscribefailed');
+					return;
 				}
-			}
-		
+			}		
 		}
 	}
-        
 	
 	/**
 	 *
@@ -63,21 +62,22 @@ class SubscribersController extends NewsletterAppController {
 	 */
 	
 	public function unsubscribe(){
+		$this->layout = "public";
 		if($this->data) {
 			$subscriber = $this->Subscriber->find('first',array('conditions' => array('Subscriber.email' => $this->data['email'])));
-                debug($subscriber);
-                        if($subscriber){
-                                if($this->Subscriber->delete($subscriber['Subscriber']['_id'])) {
-                        	        $this->Session->setFlash(__d('email','Email wurde gelöscht',false));
-			                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
-                                } else {
-                                        $this->Session->setFlash(__d('email','Probleme beim Löschen ',false));
-			                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
          
-                                }        
-			}else{
-                                $this->Session->setFlash(__d('email','Die Email wurde nicht gefunden',false));
-                                $this->redirect(array('controller' => 'newsletters', 'action' => 'index','plugin' => 'newsletter'));                                
+			if($subscriber){
+				if($this->Subscriber->delete($subscriber['Subscriber']['_id'])) {					
+					$this->render('unsubscribesuccess');
+					return;					
+				} else {
+					$this->render('unsubscribefailed');
+					return;
+				}        
+			} else {
+				$this->Session->setFlash(__d('email','Die Email wurde nicht gefunden',false));
+            $this->render('unsubscribefailed');
+				return;
 			}
 		}
 	}
