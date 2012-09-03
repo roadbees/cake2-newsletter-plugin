@@ -124,7 +124,7 @@ class SubscribersController extends NewsletterAppController {
 			if ($this->Subscriber->save($this->request->data)) {
 				
 				$this->Session->setFlash("Subscriber angelegt");
-				$this->redirect(array('manager' => true, 'controller' => "subscribers", "action" => "index"));
+				$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 			} else {
 				$this->Session->setFlash("Subscriber konnte nicht angelegt werden");
 				$this->render();

@@ -1,6 +1,4 @@
 <div id="managers-add-view">
-	
-	<p class="errors">Errors:</p>
 	<?php
 	
 		echo $this->Form->error('title');
@@ -21,15 +19,9 @@
 	
 	<p>
 		<label for="content">inhalt:</label>
-		<p><textarea id ="NewsletterContent" name="data[Newsletter][content]" cols="50" rows="20" ></textarea></p>
+		<p><textarea id ="NewsletterContent" name="data[Newsletter][content]" cols="60" rows="60" ></textarea></p>
 	</p>
-
-	<p>
-		<label for="tags">Campaings:</label>
-		<?php 
-		//echo $this->Form->input('Campaign');
-		?>
-	</p>
+	
 	<input type="file" name="data[Images][]" multiple="multiple">
 	<p>		
 		<?php echo $this->Form->button('save',array('type' => "submit")) ?>

@@ -9,27 +9,18 @@ echo $this->Html->script('/newsletter/js/libs/g.bar-min');
 ?>
 
 <div id="newsletter-plugin-index">
-    <div id="newsletterMenu">
-        <ul id="menu" class="">
-            <li><?php echo $this->Html->link('Newsletters Overview',array('manager' => true, 'controller' => 'newsletters', 'action' => 'index'))?></li>
-            <li><?php echo $this->Html->link('Subscribers Overview',array('manager' => true, 'controller' => 'subscribers', 'action' => 'index'))?></li>
-        </ul>
-    </div>
+
+    <?php echo $this->element('newsletters_overview', array('plugin' => 'Newsletter')); ?> 
+    <?php echo $this->element('subscribers_overview', array('plugin' => 'Newsletter')); ?> 
 
 
-
-    <h1>Newsletters Übersicht</h1>
-
-
-    <div id="newslettersByViews" style="width: 640px; height: 480px;"></div>
-    
     
 </div>
 
 <script>
     //get the json models
-    var _newsletters = <?php echo $newsletters ?>,
-        _subscribers = <?php echo $subscribers ?>;
+    var _newsletters = <?php echo json_encode($newsletters) ?>,
+        _subscribers = <?php echo json_encode($subscribers) ?>;
 
     //some preparations
     //for newsletters 
@@ -50,7 +41,7 @@ echo $this->Html->script('/newsletter/js/libs/g.bar-min');
 
 
     //by views
-    
+    /*
     var rNewsByViews = Raphael("newslettersByViews"),
         pieNewsByViews = rNewsByViews.piechart(320, 240, 100, _.map(newsletters, function(newsletter){ return newsletter.viewCounter;}),
             {legend: _.map(newsletters, function(newsletter){ return newsletter.title+"("+newsletter.viewCounter+")"; }), legendpos: "west"});
@@ -72,7 +63,7 @@ echo $this->Html->script('/newsletter/js/libs/g.bar-min');
             this.label[0].animate({ r: 5 }, 500, "bounce");
             this.label[1].attr({ "font-weight": 400 });
         }
-    });
+    });*/
 
 
 

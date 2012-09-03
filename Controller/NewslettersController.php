@@ -88,9 +88,9 @@ class NewslettersController extends NewsletterAppController {
 		$subscribers = $this->Subscriber->find('all');
 		$campaigns = $this->Campaign->find('all');
 		$this->set(array(
-			'newsletters' => json_encode($newsletters), 
-			'subscribers' => json_encode($subscribers),
-			'campaigns' => json_encode($campaigns)
+			'newsletters' => $newsletters, 
+			'subscribers' => $subscribers,
+			'campaigns' => $campaigns
 			)
 		);
 	}
@@ -170,7 +170,7 @@ class NewslettersController extends NewsletterAppController {
 		 	$this->Newsletter->Behaviors->attach('Mongodb.SqlCompatible');
 			if ($this->Newsletter->save($this->request->data)) {	
 				$this->Session->setFlash("Newsletter angelegt");
-				$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "index"));
+				$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 			} else {
 				$this->Session->setFlash("Newsletter konnte nicht angelegt werden");
 				$this->render();
@@ -201,10 +201,10 @@ class NewslettersController extends NewsletterAppController {
 			$this->Newsletter->save();
 			
 			$this->Session->setFlash("Newsletter erfolgreich veröffentlicht");
-			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "index"));
+			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 		} else {
 			$this->Session->setFlash("Newsletter konnte nicht veröffentlicht werden");
-			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "index"));
+			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 		}
 	}
 	
@@ -224,10 +224,10 @@ class NewslettersController extends NewsletterAppController {
 		
 		if($this->Newsletter->delete()) {
 			$this->Session->setFlash("news erfolgreich gelöscht");
-			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "index"));
+			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 		} else {
 			$this->Session->setFlash("news konnte nicht gelöscht werden");
-			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "index"));
+			$this->redirect(array('manager' => true, 'controller' => "newsletters", "action" => "dashboard"));
 		}
 		
 	}
