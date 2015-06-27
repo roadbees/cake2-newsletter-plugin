@@ -9,7 +9,7 @@
 		
 	?>
 	<div class="news-item">
-		<h2>Name: <?php echo $this->Html->link($new['Newsletter']['title'],array('manager' => false, 'controller' => 'newsletters', 'action' => 'view',$new['News']['_id']))?></h2>		
+		<h2>Name: <?php echo $this->Html->link($new['Newsletter']['title'],array('manager' => false, 'controller' => 'newsletters', 'action' => 'view',$new['Newsletter']['_id']))?></h2>		
 		
 		<p><?php echo $new['Newsletter']['content'] ?></p>
 		<p>Erstellt am: <?php echo $this->Time->niceShort($new['Newsletter']['created']->sec) ?> </p>
