@@ -70,7 +70,7 @@ class NewslettersController extends NewsletterAppController {
 	
 	public function view($id = null){
 		$this->Newsletter->id = $id;
-		$this->set('news', $this->Newsletter->read());
+		$this->set('newsletter', $this->Newsletter->read());
 		//counter increment 
 		$this->Newsletter->incrementCounter();
 	}
